@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.exifinterface)
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
 
     // CameraX core library using the camera2 implementation
     val camerax_version = "1.5.0-alpha04"
