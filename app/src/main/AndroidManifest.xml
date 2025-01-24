@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Declare features here -->
-    <uses-feature android:name="android.hardware.camera.any" />
-
-    <!-- Declare permissions here -->
+    <uses-feature android:name="android.hardware.camera.any" /> <!-- Declare permissions here -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 
     <application
@@ -20,19 +20,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-        <!-- This specifies Second Activity Screen-->
+        <activity
+            android:name=".ResultActivity"
+            android:exported="false" />
+        <!-- This specifies Second Activity Screen -->
         <activity
             android:name=".PreviewActivity"
-            android:exported="false" />
-        <!--This specifies First(Main) Activity Screen-->
+            android:exported="false" /> <!-- This specifies First(Main) Activity Screen -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <!--This Activity is the initial activity launched when app starts-->
+
+                <!-- This Activity is the initial activity launched when app starts -->
                 <action android:name="android.intent.action.MAIN" />
-                <!--This Activity should appear in the device's app launcher(home screen)
-                as an app icon-->
+                <!--
+                This Activity should appear in the device's app launcher(home screen)
+                as an app icon
+                -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

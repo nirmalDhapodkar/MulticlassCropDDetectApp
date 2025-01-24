@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt") // Add this line for Glide annotations
 }
 
 android {
@@ -44,6 +45,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.exifinterface)
     implementation("com.vanniktech:android-image-cropper:4.3.3")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.github.bumptech.glide:glide:4.15.1") // Correct Glide library
+    kapt("com.github.bumptech.glide:compiler:4.15.1") // Required for Glide annotation processing
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // CameraX core library using the camera2 implementation
     val camerax_version = "1.5.0-alpha04"
