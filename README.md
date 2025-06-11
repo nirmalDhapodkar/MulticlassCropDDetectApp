@@ -40,3 +40,8 @@ A mobile application that identifies plant diseases from leaf images using a dee
   <img src="Screenshots/im9.jpeg" width="200"/>
 </p>
 
+https://github.com/user-attachments/assets/4e1407f2-041e-4fd6-a157-3f9c0bd60d49
+
+
+
+
