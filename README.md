@@ -26,12 +26,17 @@ A mobile application that identifies plant diseases from leaf images using a dee
 ---
 
 ## 📸 Here are the screenshots of app
-![Screenshot 1](Screenshots/im1.jpeg)
-![Screenshot 2](Screenshots/im2.jpeg)
-![Screenshot 3](Screenshots/im3.jpeg)
-![Screenshot 4](Screenshots/im4.jpeg)
-![Screenshot 5](Screenshots/im5.jpeg)
-![Screenshot 6](Screenshots/im6.jpeg)
-![Screenshot 7](Screenshots/im7.jpeg)
-![Screenshot 8](Screenshots/im8.jpeg)
-![Screenshot 9](Screenshots/im9.jpeg)
+<h3>📸 Screenshots</h3>
+
+<p float="left">
+  <img src="Screenshots/im1.jpeg" width="200"/>
+  <img src="Screenshots/im2.jpeg" width="200"/>
+  <img src="Screenshots/im3.jpeg" width="200"/>
+  <img src="Screenshots/im4.jpeg" width="200"/>
+  <img src="Screenshots/im5.jpeg" width="200"/>
+  <img src="Screenshots/im6.jpeg" width="200"/>
+  <img src="Screenshots/im7.jpeg" width="200"/>
+  <img src="Screenshots/im8.jpeg" width="200"/>
+  <img src="Screenshots/im9.jpeg" width="200"/>
+</p>
+
