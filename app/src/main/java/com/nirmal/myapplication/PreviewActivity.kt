@@ -26,11 +26,15 @@ class PreviewActivity : AppCompatActivity() {
     private lateinit var saveButton: Button
     private var croppedBitmap: Bitmap? = null
 
-    private val serverUrl = "http://192.168.43.55:5000/upload"
+    private lateinit var serverUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview)
+
+        // Load server URL from SharedPreferences
+        val sharedPreferences = getSharedPreferences("AppSettings", MODE_PRIVATE)
+        serverUrl = sharedPreferences.getString("upload_url", "http://192.168.42.37:5000/upload") ?: "http://192.168.42.37:5000/upload"
 
         // Initialize views
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -161,17 +165,36 @@ class PreviewActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    val jsonResponse = JSONObject(responseBody ?: "{}")
-                    val predictedLabel = jsonResponse.optString("message", "Unknown label")
+                    val responseBody = response.body?.string() ?: "{}"  // Ensure responseBody is not null
+
+                    val jsonResponse = try {
+                        JSONObject(responseBody)
+                    } catch (e: Exception) {
+                        JSONObject() // Handle invalid JSON gracefully
+                    }
+
+                    val predictedLabel = jsonResponse.optString("name", "Unknown label")
+                    val characteristics = jsonResponse.optString("characteristics", "Unknown label")
+                    val symptoms = jsonResponse.optString("symptoms", "Unknown label")
+                    val chemicalTreatment = jsonResponse.optString("chemtreatment", "Unknown label")
+                    val remedies = jsonResponse.optString("remedies", "Unknown label")
+                    val prevention = jsonResponse.optString("prevention", "Unknown label")
                     val filePath = jsonResponse.optString("file_path", "")
 
-                    // Pass the image path and label to ResultActivity
-                    val intent = Intent(this@PreviewActivity, ResultActivity::class.java)
-                    intent.putExtra("cropped_image_path", filePath) // Pass the image path from response
-                    intent.putExtra("predicted_label", predictedLabel) // Pass the predicted label
+                    // Pass data to ResultActivity
+                    val intent = Intent(this@PreviewActivity, ResultActivity::class.java).apply {
+                        putExtra("cropped_image_path", imagePath) // Use local image path
+                        putExtra("predicted_label", predictedLabel)
+                        putExtra("characteristics", characteristics)
+                        putExtra("symptoms", symptoms)
+                        putExtra("chemical_treatment", chemicalTreatment)
+                        putExtra("remedies", remedies)
+                        putExtra("prevention", prevention)
+                    }
+
                     startActivity(intent)
-                } else {
+                }
+                else {
                     runOnUiThread {
                         Toast.makeText(
                             this@PreviewActivity,

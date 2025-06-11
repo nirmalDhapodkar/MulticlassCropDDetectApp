@@ -7,16 +7,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
@@ -27,11 +25,10 @@ import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
-
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    private var isFlashOn = false // Track flash state
 
-    // Dynamically set permissions based on Android version
     private val REQUIRED_PERMISSIONS = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
         arrayOf(
             Manifest.permission.CAMERA,
@@ -45,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
         } else {
@@ -56,14 +52,28 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        // Set up the listener for the capture photo button
-        val captureButton = findViewById<Button>(R.id.camera_capture_button)
-        captureButton.setOnClickListener { takePhoto() }
+        val captureButton = findViewById<ImageView>(R.id.camera_capture_button)
+        val flashButton = findViewById<ImageView>(R.id.flash_button) // Flash button ImageView
 
-        // Initialize output directory and executor
+        captureButton.setOnClickListener { takePhoto() }
+        flashButton.setOnClickListener { toggleFlash(flashButton) } // Toggle flash on click
+
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
+
+    private fun toggleFlash(flashButton: ImageView) {
+        isFlashOn = !isFlashOn // Toggle flash state
+
+        // Change icon based on flash state
+        flashButton.setImageResource(
+            if (isFlashOn) R.drawable.ic_flash_on else R.drawable.ic_flash_off
+        )
+
+        // Update flash mode without recreating imageCapture
+        imageCapture?.flashMode = if (isFlashOn) ImageCapture.FLASH_MODE_ON else ImageCapture.FLASH_MODE_OFF
+    }
+
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
@@ -100,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // Preview setup
             val preview = Preview.Builder()
                 .build()
                 .also {
@@ -109,21 +118,15 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 
-            imageCapture = ImageCapture.Builder().build()
+            imageCapture = ImageCapture.Builder()
+                .setFlashMode(if (isFlashOn) ImageCapture.FLASH_MODE_ON else ImageCapture.FLASH_MODE_OFF)
+                .build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
-
-                // Bind use cases to the camera
-                cameraProvider.bindToLifecycle(
-                    this,
-                    cameraSelector,
-                    preview,
-                    imageCapture
-                )
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
@@ -145,20 +148,11 @@ class MainActivity : AppCompatActivity() {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                // Check if the user denied permissions permanently
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-                    Toast.makeText(
-                        this,
-                        "Permissions denied permanently. Go to settings to enable them.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        this,
-                        "Permissions not granted by the user.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                Toast.makeText(
+                    this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             }
         }
@@ -168,8 +162,7 @@ class MainActivity : AppCompatActivity() {
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
     }
 
     override fun onDestroy() {

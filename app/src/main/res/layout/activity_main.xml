@@ -15,25 +15,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp" >
 
-    <Button
-        android:id="@+id/camera_capture_button"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="28dp"
-        android:background="@drawable/camlogo"
-        android:backgroundTint="#4CAF50"
-        android:backgroundTintMode="screen"
-        android:elevation="2dp"
-        android:foregroundTint="#8BC34A"
-        android:scaleType="fitCenter"
-        android:textColorLink="#3F51B5"
+    </androidx.camera.view.PreviewView>
+
+
+    <FrameLayout
+        android:layout_width="410dp"
+        android:layout_height="103dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/flashCard"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/flash_button"
+                        android:layout_width="20dp"
+                        android:layout_height="19dp"
+                        android:clickable="true"
+                        android:focusable="auto"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.953"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.523"
+                        app:srcCompat="@drawable/ic_flash_off" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewn"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+
+                app:cardCornerRadius="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/camera_capture_button"
+                    android:clickable="true"
+                    android:focusable="auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/camera" />
+
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

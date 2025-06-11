@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -46,7 +49,10 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation("com.vanniktech:android-image-cropper:4.3.3")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.github.bumptech.glide:glide:4.15.1") // Correct Glide library
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.translate) // Correct Glide library
     kapt("com.github.bumptech.glide:compiler:4.15.1") // Required for Glide annotation processing
     implementation("androidx.cardview:cardview:1.0.0")
 
